@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("null") // Spring Data JPA methods lack null annotations; safe by contract
 public class AuthService {
 
     private final UserRepository userRepository;

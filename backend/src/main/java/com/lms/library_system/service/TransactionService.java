@@ -19,6 +19,7 @@ import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("null") // Spring Data JPA methods lack null annotations; safe by contract
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
