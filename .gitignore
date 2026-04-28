@@ -1,0 +1,44 @@
+# ==========================================
+# Full-Stack Library Management System
+# Root .gitignore
+# ==========================================
+
+# ---- OS Files ----
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# ---- IDE / Editor ----
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ---- Backend (Spring Boot / Maven) ----
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/**/*.class
+backend/**.log
+
+# Secrets — never commit real credentials
+backend/src/main/resources/application-local.properties
+backend/src/main/resources/*.secret
+
+# ---- Frontend (React / Vite) ----
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# ---- Docker ----
+# Intentionally tracked: docker-compose.yml (uses placeholder passwords)
+# Add .env.docker here if you put real secrets there
+.env
+.env.*

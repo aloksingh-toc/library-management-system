@@ -1,0 +1,76 @@
+.back-btn {
+  margin-bottom: 2rem;
+}
+
+.book-details-card {
+  padding: 2.5rem;
+}
+
+.book-details-body {
+  margin-bottom: 2rem;
+}
+
+.book-details-author {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.book-details-description {
+  margin-bottom: 2rem;
+  color: var(--text-secondary);
+}
+
+.book-details-description h3 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.book-details-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.meta-icon {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.meta-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.15rem;
+}
+
+.meta-value {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.book-details-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.status-badge-lg {
+  font-size: 1rem;
+  padding: 0.5rem 1.25rem;
+}
+
+.borrow-btn {
+  padding: 0.9rem 2.5rem;
+  font-size: 1.05rem;
+}

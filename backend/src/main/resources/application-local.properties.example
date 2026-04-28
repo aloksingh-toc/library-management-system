@@ -1,0 +1,9 @@
+# Copy this file to application-local.properties and fill in your values.
+# application-local.properties is gitignored.
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/library_db
+spring.datasource.username=YOUR_DB_USERNAME
+spring.datasource.password=YOUR_DB_PASSWORD
+
+JWT_SECRET=your-256-bit-secret-here
+JWT_EXPIRATION=86400000

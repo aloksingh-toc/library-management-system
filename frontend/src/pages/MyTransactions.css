@@ -1,0 +1,51 @@
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transaction-card {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid transparent;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.transaction-card.status-active  { border-left-color: var(--accent-primary); }
+.transaction-card.status-returned { border-left-color: var(--success); }
+.transaction-card.status-late    { border-left-color: var(--danger); }
+
+.transaction-info { flex: 1; }
+
+.transaction-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.transaction-author {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.transaction-dates {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.date-late    { color: var(--danger); }
+.date-returned { color: var(--success); }
+
+.transaction-action { flex-shrink: 0; }
