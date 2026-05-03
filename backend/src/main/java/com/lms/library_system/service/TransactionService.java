@@ -29,6 +29,7 @@ public class TransactionService {
     private final UserRepository userRepository;
     private final TransactionMapper transactionMapper;
     private final AuditLogService auditLogService;
+    private final ReservationService reservationService;
 
     @Transactional
     public TransactionResponse borrowBook(Long userId, Long bookId) {
@@ -84,6 +85,7 @@ public class TransactionService {
         TransactionResponse response = transactionMapper.toResponse(transactionRepository.save(transaction));
         auditLogService.log(userId, transaction.getUser().getEmail(), "BOOK_RETURNED",
                 "Book: " + book.getTitle() + " (id=" + bookId + ")");
+        reservationService.fulfillNextReservation(bookId);
         return response;
     }
 

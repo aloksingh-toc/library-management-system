@@ -5,7 +5,8 @@ import { borrowBook } from '../api/transaction.service';
 import { useAuth } from '../context/AuthContext';
 import { useToast, ToastContainer } from '../components/Toast';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { ArrowLeft, BookOpen, Calendar, Hash } from 'lucide-react';
+import { ArrowLeft, BookOpen, Calendar, Hash, Bell } from 'lucide-react';
+import { reserveBook } from '../api/reservation.service';
 import './BookDetails.css';
 
 const BookDetails = () => {
@@ -17,6 +18,7 @@ const BookDetails = () => {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [borrowing, setBorrowing] = useState(false);
+  const [reserving, setReserving] = useState(false);
 
   useEffect(() => {
     getBookById(id)
@@ -43,6 +45,19 @@ const BookDetails = () => {
   if (!book) return <div className="page-container container"><h2>Book not found</h2></div>;
 
   const isAvailable = book.availableCopies > 0;
+
+  const handleReserve = async () => {
+    if (!isAuthenticated) { navigate('/login'); return; }
+    setReserving(true);
+    try {
+      await reserveBook(id);
+      addToast('Reserved! You will be notified when this book becomes available.', 'success');
+    } catch (error) {
+      addToast(error.response?.data?.message || 'Failed to reserve book.', 'error');
+    } finally {
+      setReserving(false);
+    }
+  };
 
   return (
     <div className="page-container container animate-fade-in">
@@ -93,11 +108,16 @@ const BookDetails = () => {
           </span>
           <button
             onClick={handleBorrow}
-            className={`btn ${isAvailable ? 'btn-primary' : 'btn-secondary'} borrow-btn`}
+            className="btn btn-primary borrow-btn"
             disabled={!isAvailable || borrowing}
           >
-            {borrowing ? <div className="spinner"></div> : isAvailable ? 'Borrow Book' : 'Out of Stock'}
+            {borrowing ? <div className="spinner"></div> : 'Borrow Book'}
           </button>
+          {!isAvailable && (
+            <button onClick={handleReserve} className="btn btn-secondary borrow-btn" disabled={reserving}>
+              {reserving ? <div className="spinner"></div> : <><Bell size={16} /> Reserve</>}
+            </button>
+          )}
         </div>
       </div>
     </div>

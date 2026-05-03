@@ -24,6 +24,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Optional<Transaction> findByUserIdAndBookIdAndStatus(Long userId, Long bookId, TransactionStatus status);
     long countByStatus(TransactionStatus status);
 
+    @Query("SELECT t FROM Transaction t JOIN FETCH t.user JOIN FETCH t.book")
+    Page<Transaction> findAllWithDetails(Pageable pageable);
+
     @Modifying
     @Query("UPDATE Transaction t SET t.status = :overdue WHERE t.dueDate < :today AND t.status = :borrowed")
     void markOverdue(@Param("today") LocalDate today,

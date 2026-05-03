@@ -1,3 +1,26 @@
+.no-results {
+  padding: 3rem;
+  text-align: center;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-badge.available {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
+}
+
 .transactions-list {
   display: flex;
   flex-direction: column;
@@ -48,4 +71,19 @@
 .date-late    { color: var(--danger); }
 .date-returned { color: var(--success); }
 
-.transaction-action { flex-shrink: 0; }
+.transaction-action {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.fine-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+}

@@ -23,4 +23,5 @@ public class TransactionResponse {
     private LocalDate dueDate;
     private LocalDate returnDate;
     private TransactionStatus status;
+    private double fineAmount;
 }

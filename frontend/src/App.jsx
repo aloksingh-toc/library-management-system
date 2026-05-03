@@ -12,6 +12,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import BookDetails from './pages/BookDetails';
 import MyTransactions from './pages/MyTransactions';
+import AdminDashboard from './pages/AdminDashboard';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -31,12 +33,15 @@ function App() {
               </ProtectedRoute>
             } />
 
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
+
             <Route path="/admin" element={
               <ProtectedRoute requireAdmin={true}>
-                <div className="page-container container text-center">
-                  <h1>Admin Dashboard</h1>
-                  <p>Admin features coming soon...</p>
-                </div>
+                <AdminDashboard />
               </ProtectedRoute>
             } />
           </Routes>

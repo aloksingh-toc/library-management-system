@@ -2,6 +2,7 @@
 export const TRANSACTION_STATUS = {
   BORROWED: 'BORROWED',
   RETURNED: 'RETURNED',
+  OVERDUE: 'OVERDUE',
 };
 
 // User roles - mirrors backend Role enum

@@ -35,9 +35,9 @@ const Navbar = () => {
                 </Link>
               )}
               <div className="user-profile">
-                <div className="avatar">
+                <Link to="/profile" className="avatar" title="My Profile">
                   <User size={18} />
-                </div>
+                </Link>
                 <span className="user-email">{user?.email?.split('@')[0]}</span>
                 <button onClick={handleLogout} className="btn-logout" title="Logout">
                   <LogOut size={18} />
