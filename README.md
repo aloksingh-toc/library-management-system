@@ -1,22 +1,22 @@
-# 📚 Full-Stack Library Management System
+# Full-Stack Library Management System
 
 A premium, full-stack Library Management System built with **Spring Boot** (backend) and **React + Vite** (frontend), featuring JWT authentication, role-based access control, and a modern Glassmorphism UI.
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔐 **JWT Authentication** — Register, login, and protected routes
-- 👤 **Role-Based Access** — `USER` and `ADMIN` roles
-- 📖 **Book Catalog** — Search, browse, and view books with pagination
-- 🔄 **Borrow & Return** — Full transaction lifecycle with due-date tracking
-- 🛡️ **Global Error Handling** — Structured JSON error responses across all APIs
-- ✅ **Request Validation** — Bean Validation on all API inputs
-- 🎨 **Premium UI** — Glassmorphism design, animated toasts, smooth loading states
+- **JWT Authentication** — Register, login, and protected routes
+- **Role-Based Access** — `USER` and `ADMIN` roles
+- **Book Catalog** — Search, browse, and view books with pagination
+- **Borrow & Return** — Full transaction lifecycle with due-date tracking
+- **Global Error Handling** — Structured JSON error responses across all APIs
+- **Request Validation** — Bean Validation on all API inputs
+- **Premium UI** — Glassmorphism design, animated toasts, smooth loading states
 
 ---
 
-## 🏗️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -30,7 +30,7 @@ A premium, full-stack Library Management System built with **Spring Boot** (back
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Java 21+
@@ -101,7 +101,7 @@ The app will be available at `http://localhost:5173`.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 .
@@ -112,7 +112,7 @@ The app will be available at `http://localhost:5173`.
 │   │   ├── repository/             # JPA repositories
 │   │   ├── entity/                 # JPA entities
 │   │   ├── dto/                    # Request/Response DTOs
-│   │   ├── mapper/                 # Entity ↔ DTO mappers
+│   │   ├── mapper/                 # Entity <-> DTO mappers
 │   │   ├── exception/              # Global error handling
 │   │   └── security/               # JWT filter + config
 │   └── docker-compose.yml
@@ -128,7 +128,7 @@ The app will be available at `http://localhost:5173`.
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### Auth
 | Method | Endpoint | Access |
@@ -155,7 +155,7 @@ The app will be available at `http://localhost:5173`.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feat/your-feature`
@@ -165,6 +165,6 @@ The app will be available at `http://localhost:5173`.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
