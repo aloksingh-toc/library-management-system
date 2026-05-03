@@ -4,14 +4,18 @@ import com.lms.library_system.dto.BookRequest;
 import com.lms.library_system.dto.BookResponse;
 import com.lms.library_system.service.BookService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
@@ -21,8 +25,8 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<Page<BookResponse>> getAllBooks(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(bookService.getAllBooks(pageable));
@@ -31,8 +35,8 @@ public class BookController {
     @GetMapping("/search")
     public ResponseEntity<Page<BookResponse>> searchBooks(
             @RequestParam String query,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(bookService.searchBooks(query, pageable));

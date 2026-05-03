@@ -38,4 +38,7 @@ public class Book {
     private Integer totalCopies;
 
     private Integer availableCopies;
+
+    @Version
+    private Long version;
 }

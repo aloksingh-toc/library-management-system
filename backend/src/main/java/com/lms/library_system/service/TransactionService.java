@@ -11,9 +11,11 @@ import com.lms.library_system.repository.BookRepository;
 import com.lms.library_system.repository.TransactionRepository;
 import com.lms.library_system.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -26,7 +28,9 @@ public class TransactionService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final TransactionMapper transactionMapper;
+    private final AuditLogService auditLogService;
 
+    @Transactional
     public TransactionResponse borrowBook(Long userId, Long bookId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> ApiException.notFound("User not found"));
@@ -43,8 +47,12 @@ public class TransactionService {
                     throw ApiException.conflict("You have already borrowed this book");
                 });
 
-        book.setAvailableCopies(book.getAvailableCopies() - 1);
-        bookRepository.save(book);
+        try {
+            book.setAvailableCopies(book.getAvailableCopies() - 1);
+            bookRepository.saveAndFlush(book);
+        } catch (OptimisticLockingFailureException e) {
+            throw ApiException.conflict("Another request processed this book simultaneously. Please try again.");
+        }
 
         Transaction transaction = Transaction.builder()
                 .user(user)
@@ -54,9 +62,13 @@ public class TransactionService {
                 .status(TransactionStatus.BORROWED)
                 .build();
 
-        return transactionMapper.toResponse(transactionRepository.save(transaction));
+        TransactionResponse response = transactionMapper.toResponse(transactionRepository.save(transaction));
+        auditLogService.log(userId, user.getEmail(), "BOOK_BORROWED",
+                "Book: " + book.getTitle() + " (id=" + bookId + ")");
+        return response;
     }
 
+    @Transactional
     public TransactionResponse returnBook(Long userId, Long bookId) {
         Transaction transaction = transactionRepository
                 .findByUserIdAndBookIdAndStatus(userId, bookId, TransactionStatus.BORROWED)
@@ -69,7 +81,10 @@ public class TransactionService {
         book.setAvailableCopies(book.getAvailableCopies() + 1);
 
         bookRepository.save(book);
-        return transactionMapper.toResponse(transactionRepository.save(transaction));
+        TransactionResponse response = transactionMapper.toResponse(transactionRepository.save(transaction));
+        auditLogService.log(userId, transaction.getUser().getEmail(), "BOOK_RETURNED",
+                "Book: " + book.getTitle() + " (id=" + bookId + ")");
+        return response;
     }
 
     public Page<TransactionResponse> getUserTransactions(Long userId, Pageable pageable) {

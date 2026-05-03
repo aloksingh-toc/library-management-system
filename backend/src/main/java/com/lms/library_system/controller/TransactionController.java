@@ -3,14 +3,18 @@ package com.lms.library_system.controller;
 import com.lms.library_system.dto.TransactionResponse;
 import com.lms.library_system.entity.User;
 import com.lms.library_system.service.TransactionService;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RestController
 @RequestMapping("/api/transactions")
 @RequiredArgsConstructor
@@ -37,8 +41,8 @@ public class TransactionController {
     @GetMapping("/my-history")
     public ResponseEntity<Page<TransactionResponse>> getMyHistory(
             @AuthenticationPrincipal User user,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(transactionService.getUserTransactions(user.getId(), pageable));
