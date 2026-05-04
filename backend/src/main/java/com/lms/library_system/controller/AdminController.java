@@ -3,12 +3,14 @@ package com.lms.library_system.controller;
 import com.lms.library_system.dto.AdminStatsResponse;
 import com.lms.library_system.dto.BookRequest;
 import com.lms.library_system.dto.BookResponse;
+import com.lms.library_system.dto.DailyStatResponse;
 import com.lms.library_system.dto.TransactionResponse;
 import com.lms.library_system.service.AdminService;
 import com.lms.library_system.service.BookService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +43,13 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllTransactions(
                 PageRequest.of(page, size, Sort.by("borrowDate").descending())
         ));
+    }
+
+    @GetMapping("/charts/activity")
+    public ResponseEntity<List<DailyStatResponse>> getActivityChart(
+            @RequestParam(defaultValue = "30") @Min(7) @Max(90) int days
+    ) {
+        return ResponseEntity.ok(adminService.getDailyStats(days));
     }
 
     @PostMapping("/books")

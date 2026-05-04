@@ -168,3 +168,59 @@
   text-align: center;
   color: var(--text-secondary);
 }
+
+/* Activity Chart */
+.chart-panel {
+  margin-top: 2rem;
+  padding: 1.75rem;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.chart-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.chart-range-btns {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.chart-range-btn {
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: none;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.chart-range-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-primary);
+}
+
+.chart-range-btn.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #fff;
+}
+
+.chart-loading {
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

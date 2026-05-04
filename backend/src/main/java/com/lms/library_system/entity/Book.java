@@ -33,6 +33,10 @@ public class Book {
 
     private String description;
 
+    private String genre;
+
+    private String coverUrl;
+
     private Integer publishedYear;
 
     private Integer totalCopies;

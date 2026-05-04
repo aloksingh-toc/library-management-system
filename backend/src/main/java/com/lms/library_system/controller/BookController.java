@@ -15,6 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Validated
 @RestController
 @RequestMapping("/api/books")
@@ -40,6 +42,21 @@ public class BookController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(bookService.searchBooks(query, pageable));
+    }
+
+    @GetMapping("/genres")
+    public ResponseEntity<List<String>> getAllGenres() {
+        return ResponseEntity.ok(bookService.getAllGenres());
+    }
+
+    @GetMapping("/genre/{genre}")
+    public ResponseEntity<Page<BookResponse>> getBooksByGenre(
+            @PathVariable String genre,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(bookService.getBooksByGenre(genre, pageable));
     }
 
     @GetMapping("/{id}")

@@ -29,3 +29,13 @@ export const deleteBook = async (id) => {
   const response = await api.delete(`/books/${id}`);
   return response.data;
 };
+
+export const getAllGenres = async () => {
+  const response = await api.get('/books/genres');
+  return response.data;
+};
+
+export const getBooksByGenre = async (genre, page = 0, size = 12) => {
+  const response = await api.get(`/books/genre/${encodeURIComponent(genre)}?page=${page}&size=${size}`);
+  return response.data;
+};

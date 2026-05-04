@@ -21,11 +21,18 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Page<Transaction> findByUserId(@Param("userId") Long userId, Pageable pageable);
 
     List<Transaction> findByUserIdAndStatus(Long userId, TransactionStatus status);
+    List<Transaction> findByStatus(TransactionStatus status);
     Optional<Transaction> findByUserIdAndBookIdAndStatus(Long userId, Long bookId, TransactionStatus status);
     long countByStatus(TransactionStatus status);
 
     @Query("SELECT t FROM Transaction t JOIN FETCH t.user JOIN FETCH t.book")
     Page<Transaction> findAllWithDetails(Pageable pageable);
+
+    @Query("SELECT t.borrowDate, COUNT(t) FROM Transaction t WHERE t.borrowDate >= :from GROUP BY t.borrowDate ORDER BY t.borrowDate")
+    List<Object[]> countBorrowsByDateSince(@Param("from") LocalDate from);
+
+    @Query("SELECT t.returnDate, COUNT(t) FROM Transaction t WHERE t.returnDate >= :from AND t.returnDate IS NOT NULL GROUP BY t.returnDate ORDER BY t.returnDate")
+    List<Object[]> countReturnsByDateSince(@Param("from") LocalDate from);
 
     @Modifying
     @Query("UPDATE Transaction t SET t.status = :overdue WHERE t.dueDate < :today AND t.status = :borrowed")

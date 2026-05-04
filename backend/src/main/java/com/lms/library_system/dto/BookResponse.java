@@ -15,6 +15,8 @@ public class BookResponse {
     private String author;
     private String isbn;
     private String description;
+    private String genre;
+    private String coverUrl;
     private Integer publishedYear;
     private Integer totalCopies;
     private Integer availableCopies;

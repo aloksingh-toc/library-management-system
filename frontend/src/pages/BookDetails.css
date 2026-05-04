@@ -4,6 +4,57 @@
 
 .book-details-card {
   padding: 2.5rem;
+  overflow: hidden;
+}
+
+/* Side-by-side layout when cover is present */
+.book-details-layout {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+.book-details-cover {
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.details-cover-img {
+  width: 200px;
+  height: 290px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.book-details-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-genre-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 20px;
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--accent-primary);
+  font-size: 0.82rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .book-details-layout {
+    flex-direction: column;
+  }
+  .book-details-cover {
+    width: 100%;
+  }
+  .details-cover-img {
+    width: 100%;
+    height: 260px;
+  }
 }
 
 .book-details-body {

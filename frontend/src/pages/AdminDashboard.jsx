@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { getAdminStats, getAllTransactions, adminAddBook, adminUpdateBook, adminDeleteBook } from '../api/admin.service';
+import { getAdminStats, getAllTransactions, adminAddBook, adminUpdateBook, adminDeleteBook, getActivityChart } from '../api/admin.service';
 import { getAllBooks } from '../api/book.service';
 import { useToast, ToastContainer } from '../components/Toast';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { BarChart2, BookOpen, Users, AlertCircle, RefreshCw, Plus, Edit2, Trash2, X, Check } from 'lucide-react';
 import { TRANSACTION_STATUS } from '../constants';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from 'recharts';
 import './AdminDashboard.css';
 
-const EMPTY_BOOK = { title: '', author: '', isbn: '', description: '', publishedYear: '', totalCopies: 1 };
+const EMPTY_BOOK = { title: '', author: '', isbn: '', description: '', genre: '', coverUrl: '', publishedYear: '', totalCopies: 1 };
 
 const AdminDashboard = () => {
   const [tab, setTab] = useState('stats');
   const [stats, setStats] = useState(null);
+  const [chartData, setChartData] = useState([]);
+  const [chartDays, setChartDays] = useState(30);
+  const [chartLoading, setChartLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +34,7 @@ const AdminDashboard = () => {
   const [deletingId, setDeletingId] = useState(null);
   const { toasts, addToast, removeToast } = useToast();
 
-  useEffect(() => { fetchStats(); }, []);
+  useEffect(() => { fetchStats(); fetchChart(chartDays); }, []);
   useEffect(() => {
     if (tab === 'transactions') fetchTransactions();
     if (tab === 'books') fetchBooks();
@@ -36,6 +49,24 @@ const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchChart = async (days) => {
+    setChartLoading(true);
+    try {
+      const data = await getActivityChart(days);
+      // Format dates to be shorter for the x-axis
+      setChartData(data.map(d => ({ ...d, date: d.date.slice(5) }))); // "MM-DD"
+    } catch {
+      addToast('Failed to load chart data.', 'error');
+    } finally {
+      setChartLoading(false);
+    }
+  };
+
+  const handleChartDaysChange = (days) => {
+    setChartDays(days);
+    fetchChart(days);
   };
 
   const fetchTransactions = async () => {
@@ -100,7 +131,7 @@ const AdminDashboard = () => {
 
   const openEdit = (book) => {
     setEditingId(book.id);
-    setBookForm({ title: book.title, author: book.author, isbn: book.isbn, description: book.description || '', publishedYear: book.publishedYear || '', totalCopies: book.totalCopies });
+    setBookForm({ title: book.title, author: book.author, isbn: book.isbn, description: book.description || '', genre: book.genre || '', coverUrl: book.coverUrl || '', publishedYear: book.publishedYear || '', totalCopies: book.totalCopies });
   };
 
   const statusClass = (status) => {
@@ -131,33 +162,114 @@ const AdminDashboard = () => {
       </div>
 
       {tab === 'stats' && stats && (
-        <div className="stats-grid">
-          <div className="stat-card glass-panel">
-            <BookOpen size={28} className="stat-icon" />
-            <div className="stat-value">{stats.totalBooks}</div>
-            <div className="stat-label">Total Books</div>
+        <>
+          <div className="stats-grid">
+            <div className="stat-card glass-panel">
+              <BookOpen size={28} className="stat-icon" />
+              <div className="stat-value">{stats.totalBooks}</div>
+              <div className="stat-label">Total Books</div>
+            </div>
+            <div className="stat-card glass-panel">
+              <Users size={28} className="stat-icon" />
+              <div className="stat-value">{stats.totalUsers}</div>
+              <div className="stat-label">Registered Users</div>
+            </div>
+            <div className="stat-card glass-panel">
+              <RefreshCw size={28} className="stat-icon stat-active" />
+              <div className="stat-value">{stats.activeLoans}</div>
+              <div className="stat-label">Active Loans</div>
+            </div>
+            <div className="stat-card glass-panel">
+              <AlertCircle size={28} className="stat-icon stat-danger" />
+              <div className="stat-value">{stats.overdueLoans}</div>
+              <div className="stat-label">Overdue Loans</div>
+            </div>
+            <div className="stat-card glass-panel">
+              <BarChart2 size={28} className="stat-icon" />
+              <div className="stat-value">{stats.totalTransactions}</div>
+              <div className="stat-label">Total Transactions</div>
+            </div>
           </div>
-          <div className="stat-card glass-panel">
-            <Users size={28} className="stat-icon" />
-            <div className="stat-value">{stats.totalUsers}</div>
-            <div className="stat-label">Registered Users</div>
+
+          <div className="chart-panel glass-panel">
+            <div className="chart-header">
+              <h3 className="chart-title">Library Activity</h3>
+              <div className="chart-range-btns">
+                {[7, 14, 30, 60].map(d => (
+                  <button
+                    key={d}
+                    className={`chart-range-btn ${chartDays === d ? 'active' : ''}`}
+                    onClick={() => handleChartDaysChange(d)}
+                  >
+                    {d}d
+                  </button>
+                ))}
+              </div>
+            </div>
+            {chartLoading ? (
+              <div className="chart-loading"><div className="spinner" /></div>
+            ) : (
+              <ResponsiveContainer width="100%" height={280}>
+                <AreaChart data={chartData} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorBorrows" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorReturns" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--success, #22c55e)" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="var(--success, #22c55e)" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
+                    tickLine={false}
+                    axisLine={false}
+                    interval={chartDays <= 14 ? 0 : Math.floor(chartDays / 10)}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
+                    tickLine={false}
+                    axisLine={false}
+                    allowDecimals={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      background: 'var(--bg-card)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '8px',
+                      fontSize: '13px',
+                    }}
+                    labelStyle={{ color: 'var(--text-secondary)', marginBottom: 4 }}
+                  />
+                  <Legend wrapperStyle={{ fontSize: '13px', paddingTop: '12px' }} />
+                  <Area
+                    type="monotone"
+                    dataKey="borrows"
+                    name="Borrows"
+                    stroke="var(--primary)"
+                    strokeWidth={2}
+                    fill="url(#colorBorrows)"
+                    dot={false}
+                    activeDot={{ r: 4 }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="returns"
+                    name="Returns"
+                    stroke="var(--success, #22c55e)"
+                    strokeWidth={2}
+                    fill="url(#colorReturns)"
+                    dot={false}
+                    activeDot={{ r: 4 }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </div>
-          <div className="stat-card glass-panel">
-            <RefreshCw size={28} className="stat-icon stat-active" />
-            <div className="stat-value">{stats.activeLoans}</div>
-            <div className="stat-label">Active Loans</div>
-          </div>
-          <div className="stat-card glass-panel">
-            <AlertCircle size={28} className="stat-icon stat-danger" />
-            <div className="stat-value">{stats.overdueLoans}</div>
-            <div className="stat-label">Overdue Loans</div>
-          </div>
-          <div className="stat-card glass-panel">
-            <BarChart2 size={28} className="stat-icon" />
-            <div className="stat-value">{stats.totalTransactions}</div>
-            <div className="stat-label">Total Transactions</div>
-          </div>
-        </div>
+        </>
       )}
 
       {tab === 'books' && (
@@ -187,6 +299,10 @@ const AdminDashboard = () => {
                   <input className="form-control" required value={bookForm.isbn} onChange={e => setBookForm({ ...bookForm, isbn: e.target.value })} />
                 </div>
                 <div className="form-group">
+                  <label className="form-label">Genre</label>
+                  <input className="form-control" value={bookForm.genre} placeholder="e.g. Fiction, Science, History" onChange={e => setBookForm({ ...bookForm, genre: e.target.value })} />
+                </div>
+                <div className="form-group">
                   <label className="form-label">Published Year</label>
                   <input className="form-control" type="number" value={bookForm.publishedYear} onChange={e => setBookForm({ ...bookForm, publishedYear: e.target.value })} />
                 </div>
@@ -194,6 +310,10 @@ const AdminDashboard = () => {
                   <label className="form-label">Total Copies *</label>
                   <input className="form-control" type="number" min="1" required value={bookForm.totalCopies} onChange={e => setBookForm({ ...bookForm, totalCopies: e.target.value })} />
                 </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Cover Image URL</label>
+                <input className="form-control" type="url" placeholder="https://..." value={bookForm.coverUrl} onChange={e => setBookForm({ ...bookForm, coverUrl: e.target.value })} />
               </div>
               <div className="form-group">
                 <label className="form-label">Description</label>

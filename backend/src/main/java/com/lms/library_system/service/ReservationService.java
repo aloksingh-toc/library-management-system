@@ -20,6 +20,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Transactional
     public ReservationResponse reserve(Long userId, Long bookId) {
@@ -70,6 +71,7 @@ public class ReservationService {
                 .stream().findFirst().ifPresent(r -> {
                     r.setStatus(ReservationStatus.FULFILLED);
                     reservationRepository.save(r);
+                    emailService.sendReservationFulfilled(r.getUser().getEmail(), r.getBook().getTitle());
                 });
     }
 

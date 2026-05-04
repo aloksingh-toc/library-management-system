@@ -27,6 +27,10 @@ public class BookRequest {
 
     private String description;
 
+    private String genre;
+
+    private String coverUrl;
+
     private Integer publishedYear;
 
     @NotNull(message = "Total copies is required")

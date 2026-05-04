@@ -14,6 +14,8 @@ public class BookMapper {
                 .author(book.getAuthor())
                 .isbn(book.getIsbn())
                 .description(book.getDescription())
+                .genre(book.getGenre())
+                .coverUrl(book.getCoverUrl())
                 .publishedYear(book.getPublishedYear())
                 .totalCopies(book.getTotalCopies())
                 .availableCopies(book.getAvailableCopies())

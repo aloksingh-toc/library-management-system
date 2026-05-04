@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @SuppressWarnings("null") // Spring Data JPA methods lack null annotations; safe by contract
@@ -25,6 +27,14 @@ public class BookService {
 
     public Page<BookResponse> searchBooks(String query, Pageable pageable) {
         return bookRepository.searchBooks(query, pageable).map(bookMapper::toResponse);
+    }
+
+    public Page<BookResponse> getBooksByGenre(String genre, Pageable pageable) {
+        return bookRepository.findByGenreIgnoreCase(genre, pageable).map(bookMapper::toResponse);
+    }
+
+    public List<String> getAllGenres() {
+        return bookRepository.findAllGenres();
     }
 
     public BookResponse getBookById(Long id) {
@@ -43,6 +53,8 @@ public class BookService {
                 .author(request.getAuthor())
                 .isbn(request.getIsbn())
                 .description(request.getDescription())
+                .genre(request.getGenre())
+                .coverUrl(request.getCoverUrl())
                 .publishedYear(request.getPublishedYear())
                 .totalCopies(request.getTotalCopies())
                 .availableCopies(request.getTotalCopies())
@@ -70,6 +82,8 @@ public class BookService {
         book.setAuthor(request.getAuthor());
         book.setIsbn(request.getIsbn());
         book.setDescription(request.getDescription());
+        book.setGenre(request.getGenre());
+        book.setCoverUrl(request.getCoverUrl());
         book.setPublishedYear(request.getPublishedYear());
         book.setTotalCopies(request.getTotalCopies());
         book.setAvailableCopies(newAvailable);

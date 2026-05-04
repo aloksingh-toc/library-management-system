@@ -55,6 +55,36 @@
   padding: 0.5rem;
 }
 
+.genre-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.genre-chip {
+  padding: 0.35rem 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.genre-chip:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.genre-chip.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
 .books-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

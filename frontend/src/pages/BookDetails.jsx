@@ -5,7 +5,7 @@ import { borrowBook } from '../api/transaction.service';
 import { useAuth } from '../context/AuthContext';
 import { useToast, ToastContainer } from '../components/Toast';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { ArrowLeft, BookOpen, Calendar, Hash, Bell } from 'lucide-react';
+import { ArrowLeft, BookOpen, Calendar, Hash, Bell, Tag } from 'lucide-react';
 import { reserveBook } from '../api/reservation.service';
 import './BookDetails.css';
 
@@ -68,9 +68,19 @@ const BookDetails = () => {
       </button>
 
       <div className="glass-panel book-details-card">
+        <div className="book-details-layout">
+          {book.coverUrl && (
+            <div className="book-details-cover">
+              <img src={book.coverUrl} alt={`Cover of ${book.title}`} className="details-cover-img" />
+            </div>
+          )}
+        <div className="book-details-content">
         <div className="book-details-body">
           <h1 className="page-title">{book.title}</h1>
           <p className="book-details-author">by {book.author}</p>
+          {book.genre && (
+            <span className="book-genre-tag"><Tag size={13} /> {book.genre}</span>
+          )}
 
           <div className="book-details-description">
             <h3>Description</h3>
@@ -119,6 +129,8 @@ const BookDetails = () => {
             </button>
           )}
         </div>
+        </div> {/* end book-details-content */}
+        </div> {/* end book-details-layout */}
       </div>
     </div>
   );

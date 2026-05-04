@@ -23,3 +23,8 @@ export const adminUpdateBook = async (id, bookData) => {
 export const adminDeleteBook = async (id) => {
   await api.delete(`/admin/books/${id}`);
 };
+
+export const getActivityChart = async (days = 30) => {
+  const response = await api.get(`/admin/charts/activity?days=${days}`);
+  return response.data;
+};
