@@ -1,5 +1,13 @@
 # Full-Stack Library Management System
 
+[![CI](https://github.com/aloksingh-toc/library-management-system/actions/workflows/ci.yml/badge.svg)](https://github.com/aloksingh-toc/library-management-system/actions/workflows/ci.yml)
+![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-brightgreen?logo=springboot)
+![React](https://img.shields.io/badge/React-19-blue?logo=react)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?logo=postgresql)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
 A premium, full-stack Library Management System built with **Spring Boot** (backend) and **React + Vite** (frontend), featuring JWT authentication, role-based access control, and a modern Glassmorphism UI.
 
 ---
@@ -32,13 +40,28 @@ A premium, full-stack Library Management System built with **Spring Boot** (back
 
 ## Getting Started
 
-### Prerequisites
-- Java 21+
-- Node.js 18+
-- Docker (optional, for PostgreSQL)
-- Maven (or use the included `mvnw` wrapper)
+### Option A — Docker (recommended, runs everything)
+
+**Prerequisites:** Docker + Docker Compose
+
+```bash
+git clone https://github.com/YOUR_USERNAME/library-management-system.git
+cd library-management-system
+
+cp .env.example .env
+# Edit .env and set JWT_SECRET to a strong random value
+
+docker-compose up --build
+```
+
+The app will be available at `http://localhost`.  
+The API will be available at `http://localhost:8080`.
 
 ---
+
+### Option B — Run manually
+
+**Prerequisites:** Java 21+, Node.js 18+, Docker (for PostgreSQL), Maven
 
 ### 1. Clone the Repository
 ```bash
