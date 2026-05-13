@@ -98,7 +98,6 @@ class BookServiceTest {
         book.setAvailableCopies(1);
         book.setTotalCopies(3);
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
-        when(bookRepository.existsByIsbn(any())).thenReturn(false);
 
         BookRequest reduceRequest = BookRequest.builder()
                 .title("Clean Code").author("Robert Martin")
