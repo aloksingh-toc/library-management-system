@@ -6,7 +6,7 @@
 ![React](https://img.shields.io/badge/React-19-blue?logo=react)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue?logo=postgresql)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)
 
 A premium, full-stack Library Management System built with **Spring Boot** (backend) and **React + Vite** (frontend), featuring JWT authentication, role-based access control, and a modern Glassmorphism UI.
 
@@ -190,4 +190,4 @@ The app will be available at `http://localhost:5173`.
 
 ## License
 
-This project is licensed under the MIT License.
+Licensed under the [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE).
